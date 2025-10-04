@@ -1,23 +1,25 @@
 {
-  "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.1",
-    "express": "^5.1.0",
-    "init": "^0.1.2",
-    "nodemailer": "^7.0.5",
-    "nodemon": "^3.1.10"
-  },
   "name": "backend",
   "version": "1.0.0",
+  "description": "Backend server for Servana project using Gmail API",
   "main": "server.js",
-  "type":"module",
-  "devDependencies": {},
+  "type": "module",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
-  "keywords": ["SERVANA"],
+  "keywords": ["SERVANA", "GmailAPI", "NodeJS", "Express"],
   "author": "Pro",
   "license": "ISC",
-  "description": ""
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "express-rate-limit": "^6.8.0",
+    "googleapis": "^121.0.0",
+    "helmet": "^6.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
 }
