@@ -12,13 +12,24 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// Nodemailer transporter
+// Nodemailer transporter (Gmail with App Password)
 const transporter = nodemailer.createTransport({
-  service: "gmail", // or use host/port if custom SMTP
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true, // use SSL
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
+    user: process.env.EMAIL_USER, // Gmail address
+    pass: process.env.EMAIL_PASS, // Gmail App Password
   },
+});
+
+// Verify connection
+transporter.verify((err, success) => {
+  if (err) {
+    console.error("SMTP Error:", err);
+  } else {
+    console.log("SMTP Server is ready to send messages ✅");
+  }
 });
 
 // Contact API
@@ -31,7 +42,8 @@ app.post("/api/contact", async (req, res) => {
 
   try {
     await transporter.sendMail({
-      from: `"${firstName} ${lastName}" <${email}>`,
+      from: `"${firstName} ${lastName}" <${process.env.EMAIL_USER}>`,
+      replyTo: email,
       to: process.env.RECEIVER_EMAIL,
       subject: "New Contact Form Submission",
       html: `
@@ -65,7 +77,8 @@ app.post("/api/startproject", async (req, res) => {
 
   try {
     await transporter.sendMail({
-      from: `"${name}" <${contact}>`,
+      from: `"${name}" <${process.env.EMAIL_USER}>`,
+      replyTo: email || contact,
       to: process.env.RECEIVER_EMAIL,
       subject: "New Project Request",
       html: `
@@ -93,5 +106,5 @@ app.post("/api/startproject", async (req, res) => {
 
 // Start Server
 app.listen(PORT, () => {
-  console.log(` Server running on http://localhost:${PORT}`);
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
